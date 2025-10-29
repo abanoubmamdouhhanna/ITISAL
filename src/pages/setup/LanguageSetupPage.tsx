@@ -55,6 +55,7 @@ const LanguageSetupPage = () => {
   const [loading, setLoading] = useState(false);
   const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
   const [isTranslationDialogOpen, setIsTranslationDialogOpen] = useState(false);
+  const [allTranslationKeys, setAllTranslationKeys] = useState<string[]>([]);
   
   const [languageForm, setLanguageForm] = useState({
     code: "",
@@ -76,6 +77,7 @@ const LanguageSetupPage = () => {
 
   useEffect(() => {
     loadLanguages();
+    loadAllTranslationKeys();
   }, []);
 
   useEffect(() => {
@@ -114,6 +116,23 @@ const LanguageSetupPage = () => {
     } catch (err: any) {
       console.error("Error loading translations:", err);
       toast.error("Failed to load translations");
+    }
+  };
+
+  const loadAllTranslationKeys = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("language_setup")
+        .select("key_name")
+        .order("key_name", { ascending: true });
+
+      if (error) throw error;
+      
+      // Get unique keys
+      const uniqueKeys = Array.from(new Set(data?.map(t => t.key_name) || []));
+      setAllTranslationKeys(uniqueKeys);
+    } catch (err: any) {
+      console.error("Error loading translation keys:", err);
     }
   };
 
@@ -209,6 +228,7 @@ const LanguageSetupPage = () => {
       } else if (selectedLanguage) {
         await loadTranslations(selectedLanguage);
       }
+      await loadAllTranslationKeys();
       setTranslationForm({ key_name: "", language_code: "", translated_text: "", group_category: "" });
       setIsTranslationDialogOpen(false);
     } catch (err: any) {
@@ -538,12 +558,21 @@ const LanguageSetupPage = () => {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="trans-key">{t('lang.translationKey')} *</Label>
-                        <Input
-                          id="trans-key"
+                        <Select
                           value={translationForm.key_name}
-                          onChange={(e) => setTranslationForm({ ...translationForm, key_name: e.target.value })}
-                          placeholder="app.welcome"
-                        />
+                          onValueChange={(value) => setTranslationForm({ ...translationForm, key_name: value })}
+                        >
+                          <SelectTrigger id="trans-key">
+                            <SelectValue placeholder={t('lang.selectKey') || "Select a translation key"} />
+                          </SelectTrigger>
+                          <SelectContent position="popper" className="max-h-[200px]">
+                            {allTranslationKeys.map((key) => (
+                              <SelectItem key={key} value={key}>
+                                {key}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="trans-value">{t('lang.translatedText')} *</Label>

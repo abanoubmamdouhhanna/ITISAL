@@ -183,7 +183,7 @@ const ManagementDashboard = () => {
                   {t('management.title')}
                 </h1>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Real-time analytics and order management
+                  {t('management.realtimeAnalytics')}
                 </p>
               </div>
               
@@ -195,7 +195,7 @@ const ManagementDashboard = () => {
                 className="self-start sm:self-center"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-                Refresh
+                {t('management.refresh')}
               </Button>
             </div>
 
@@ -207,10 +207,10 @@ const ManagementDashboard = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">Last 24 hours</SelectItem>
-                  <SelectItem value="7">Last 7 days</SelectItem>
-                  <SelectItem value="30">Last 30 days</SelectItem>
-                  <SelectItem value="90">Last 90 days</SelectItem>
+                  <SelectItem value="1">{t('management.last24Hours')}</SelectItem>
+                  <SelectItem value="7">{t('management.last7Days')}</SelectItem>
+                  <SelectItem value="30">{t('management.last30Days')}</SelectItem>
+                  <SelectItem value="90">{t('management.last90Days')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -260,7 +260,7 @@ const ManagementDashboard = () => {
                     <p className="text-sm font-medium text-muted-foreground">{t('management.openOrders')}</p>
                     <h3 className="text-3xl font-bold">{orderMetrics.openOrders}</h3>
                     <p className="text-xs text-muted-foreground">
-                      {orderMetrics.totalOrders > 0 ? Math.round((orderMetrics.openOrders / orderMetrics.totalOrders) * 100) : 0}% of total
+                      {orderMetrics.totalOrders > 0 ? Math.round((orderMetrics.openOrders / orderMetrics.totalOrders) * 100) : 0}% {t('management.ofTotal')}
                     </p>
                   </div>
                   <div className="bg-amber-100 p-3 rounded-full">
@@ -277,7 +277,7 @@ const ManagementDashboard = () => {
                     <p className="text-sm font-medium text-muted-foreground">{t('management.deliveredOrders')}</p>
                     <h3 className="text-3xl font-bold">{orderMetrics.deliveredOrders}</h3>
                     <p className="text-xs text-muted-foreground">
-                      {orderMetrics.totalOrders > 0 ? Math.round((orderMetrics.deliveredOrders / orderMetrics.totalOrders) * 100) : 0}% completion
+                      {orderMetrics.totalOrders > 0 ? Math.round((orderMetrics.deliveredOrders / orderMetrics.totalOrders) * 100) : 0}% {t('management.completion')}
                     </p>
                   </div>
                   <div className="bg-green-100 p-3 rounded-full">
@@ -302,7 +302,7 @@ const ManagementDashboard = () => {
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Avg: ${orderMetrics.avgOrderValue.toFixed(2)}
+                      {t('management.avg')}: ${orderMetrics.avgOrderValue.toFixed(2)}
                     </p>
                   </div>
                   <div className="bg-blue-100 p-3 rounded-full">
@@ -317,8 +317,8 @@ const ManagementDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <Card className="hover:shadow-lg transition-all">
               <CardHeader>
-                <CardTitle className="text-lg">Order Trend</CardTitle>
-                <CardDescription>Daily orders and revenue over time</CardDescription>
+                <CardTitle className="text-lg">{t('management.orderTrend')}</CardTitle>
+                <CardDescription>{t('management.dailyOrdersRevenue')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -338,7 +338,7 @@ const ManagementDashboard = () => {
                         dataKey="orders" 
                         stroke="hsl(var(--primary))" 
                         strokeWidth={2}
-                        name="Orders"
+                        name={t('management.orders')}
                         dot={{ fill: 'hsl(var(--primary))' }}
                       />
                       <Line 
@@ -347,7 +347,7 @@ const ManagementDashboard = () => {
                         dataKey="revenue" 
                         stroke="#22c55e" 
                         strokeWidth={2}
-                        name="Revenue ($)"
+                        name={t('management.revenue')}
                         dot={{ fill: '#22c55e' }}
                       />
                     </LineChart>
@@ -358,8 +358,8 @@ const ManagementDashboard = () => {
             
             <Card className="hover:shadow-lg transition-all">
               <CardHeader>
-                <CardTitle className="text-lg">Order Status Distribution</CardTitle>
-                <CardDescription>Breakdown by order status</CardDescription>
+                <CardTitle className="text-lg">{t('management.orderStatusDistribution')}</CardTitle>
+                <CardDescription>{t('management.breakdownByStatus')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -394,7 +394,7 @@ const ManagementDashboard = () => {
           <Card className="hover:shadow-lg transition-all">
             <CardHeader>
               <CardTitle>{t('management.orderManagement')}</CardTitle>
-              <CardDescription>View and manage all orders</CardDescription>
+              <CardDescription>{t('management.viewManageOrders')}</CardDescription>
             </CardHeader>
             <CardContent>
               <OrderTabs />
