@@ -1,0 +1,64 @@
+
+/* Add RTL support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.rtl .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.rtl .text-left {
+  text-align: right;
+}
+
+.rtl .text-right {
+  text-align: left;
+}
+
+/* Fix flex direction for RTL */
+.rtl .flex-row {
+  flex-direction: row-reverse;
+}
+
+.rtl .items-start {
+  align-items: flex-start;
+}
+
+/* Override some component-specific styles for RTL */
+.rtl .dropdown-menu {
+  text-align: right;
+}
+
+.rtl .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.rtl .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/* Badge-specific RTL fixes */
+.rtl .badge-icon {
+  margin-right: 0;
+  margin-left: 0.25rem;
+}
+
+/* Status badge RTL specific adjustments */
+.rtl .flex.items-center.gap-0\\ {
+  flex-direction: row-reverse;
+}
+
+/* Keep original style for some components */
+.rtl .flex-col {
+  flex-direction: column;
+}
