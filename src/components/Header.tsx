@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useLanguage } from '@/context/LanguageContext';
-import { logout } from '@/lib/auth';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import SetupMenu from '@/components/SetupMenu';
 import { useTheme } from 'next-themes';
@@ -28,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   const { t, isRTL, language } = useLanguage();
   const { theme, setTheme } = useTheme();
   const { brands } = useStore();
+  const { signOut } = useAuth();
   
   const brand = brands[0];
   const brandName = brand ? (language === 'ar' ? brand.brandArName : brand.brandEngName) : title;
@@ -45,10 +46,14 @@ const Header: React.FC<HeaderProps> = ({
     navigate('/');
   };
 
-  const handleLogout = () => {
-    logout();
-    toast.success('Logged out successfully');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success(t('app.logout_success') || 'Logged out successfully');
+      navigate('/login');
+    } catch (error) {
+      toast.error('Failed to logout');
+    }
   };
 
   const toggleTheme = () => {

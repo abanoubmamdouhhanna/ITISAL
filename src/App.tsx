@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import NewOrder from '@/pages/NewOrder';
 import PosScreen from '@/pages/PosScreen';
@@ -11,9 +11,9 @@ import { Toaster } from 'sonner';
 import { ThemeProvider } from 'next-themes';
 import { StoreProvider } from '@/context/StoreContext';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
 import ManagementDashboard from '@/pages/ManagementDashboard';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
-import { isAuthenticated } from '@/lib/auth';
 
 // Setup pages
 import StoreSetupPage from '@/pages/setup/StoreSetupPage';
@@ -25,25 +25,36 @@ import UserSetupPage from '@/pages/setup/UserSetupPage';
 import SecuritySetupPage from '@/pages/setup/SecuritySetupPage';
 import LanguageSetupPage from '@/pages/setup/LanguageSetupPage';
 
-// Simple auth route component to protect routes
-const ProtectedRoute = ({ children }) => {
-  // if (!isAuthenticated()) {
-  //   return <Navigate to="/login" replace />;
-  // }
+// Protected route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
   
-  return children;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
 };
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" attribute="class">
-      <LanguageProvider>
-        <StoreProvider>
-          <Router>
-            <div className="fixed top-4 right-4 z-50">
-              <PWAInstallPrompt />
-            </div>
-            <Routes>
+      <AuthProvider>
+        <LanguageProvider>
+          <StoreProvider>
+            <Router>
+              <div className="fixed top-4 right-4 z-50">
+                <PWAInstallPrompt />
+              </div>
+              <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/" element={
                 <ProtectedRoute>
@@ -114,6 +125,7 @@ function App() {
           </Router>
         </StoreProvider>
       </LanguageProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

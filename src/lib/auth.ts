@@ -1,70 +1,23 @@
-import { User } from "@supabase/supabase-js";
+// This file is deprecated - authentication is now handled by AuthContext
+// Kept for backward compatibility during migration
 
 /**
- * Checks if user is logged in based on localStorage
+ * @deprecated Use useAuth hook from AuthContext instead
  */
 export const isAuthenticated = (): boolean => {
-  return localStorage.getItem('isLoggedIn') === 'true';
+  return false; // Will be handled by AuthContext
 };
 
 /**
- * Get current user from localStorage
+ * @deprecated Use useAuth hook from AuthContext instead
  */
 export const getCurrentUser = () => {
-  const userStr = localStorage.getItem('user');
-  if (!userStr) return null;
-  
-  try {
-    return JSON.parse(userStr);
-  } catch (e) {
-    console.error('Error parsing user data', e);
-    return null;
-  }
+  return null;
 };
 
 /**
- * Logout user by removing localStorage items
+ * @deprecated Use useAuth hook from AuthContext instead
  */
 export const logout = () => {
-  localStorage.removeItem('isLoggedIn');
-  localStorage.removeItem('user');
+  // Will be handled by AuthContext
 };
-// export class UserCls{
-//   userName:string;
-//   password:string
-// }
-// export async function login(user:UserCls){
-//   //console.log(JSON.stringify({ places }));
-//   console.log({user})
-//   const response = await fetch("http://localhost:5000/auth/login",{
-//     method:"POST",
-//     body: JSON.stringify({ user }),
-//     headers: { 'Content-Type': 'application/json' },
-//   });
-//   const resData = await response.json();
-//   if (!response.ok) {
-// ;
-//     throw new Error(" Failed to Update UserData");
-
-//   }
-//   console.log(resData.message);
-//   return resData.message;
-// }
-export async function login(user: { userName: string; password: string }) {
-  console.log({ user });
-
-  const response = await fetch("http://localhost:5000/auth/login", {
-    method: "POST",
-    body: JSON.stringify(user), // no longer need `{ user }`
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  const resData = await response.json();
-
-  if (!response.ok) {
-    throw new Error("Failed to login");
-  }
-
-  console.log(resData.message);
-  return resData.message;
-}

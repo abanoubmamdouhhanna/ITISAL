@@ -1,23 +1,19 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '@/components/LoginForm';
 import AnimatedTransition from '@/components/AnimatedTransition';
-import { useLanguage } from '@/context/LanguageContext';
-
+import { useAuth } from '@/context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { user, loading } = useAuth();
   
   useEffect(() => {
-    // Check if user is already logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    
-    if (isLoggedIn) {
+    // Redirect if already authenticated
+    if (user && !loading) {
       navigate('/');
     }
-  }, [navigate]);
+  }, [user, loading, navigate]);
   
   return (
     <AnimatedTransition location="login">
